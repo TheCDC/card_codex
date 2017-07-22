@@ -8,12 +8,17 @@ import build_models
 import build_library
 import build_nltk
 from flask import Flask, render_template, redirect, request, abort
-
+import multiprocessing
 # an ungly and slow way of ensuring the production server has the models
-build_library.main()
-build_models.main()
-build_nltk.main()
 
+
+def build_files():
+    build_library.main()
+    build_models.main()
+
+
+t = multiprocessing.Process(target=build_files)
+t.start()
 
 app = Flask(__name__)
 

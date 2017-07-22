@@ -4,14 +4,14 @@ import logging
 import random
 import re
 import os
+import build_models
+import build_library
+from flask import Flask, render_template, redirect, request, abort
 
-from flask import Flask, render_template, redirect, request, Response, abort
 app = Flask(__name__)
 
-from gensim import corpora, models, similarities
 
-from build_models import Similaritron, tokenize
-sim = Similaritron()
+sim = build_models.Similaritron()
 
 
 @app.url_defaults
@@ -82,7 +82,8 @@ def request_context(request):
             context['search_type'] = 'card'
             target_card = sim.get_card_by_name(card_name)
             context['target_card'] = target_card
-            app.logger.debug('%s: %s' % (card_name, tokenize(target_card)))
+            app.logger.debug('%s: %s' %
+                             (card_name, build_models.tokenize(target_card)))
             context['similar_cards'] = sim.get_similar_cards(
                 card_name, N, offset, filters)
         except Exception as e:
@@ -144,7 +145,8 @@ def home():
             context['search_type'] = 'card'
             target_card = sim.get_card_by_name(card_name)
             context['target_card'] = target_card
-            app.logger.debug('%s: %s' % (card_name, tokenize(target_card)))
+            app.logger.debug('%s: %s' %
+                             (card_name, build_models.tokenize(target_card)))
             context['similar_cards'] = sim.get_similar_cards(
                 card_name, N, offset, filters)
         except Exception as e:
@@ -172,7 +174,6 @@ def home():
 @app.route("/api/")
 def api_search():
     try:
-
         return json.dumps(request_context(request))
     except KeyError:
         abort(404)

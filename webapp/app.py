@@ -14,7 +14,7 @@ import multiprocessing
 app = Flask(__name__)
 
 stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
+stream_handler.setLevel(logging.DEBUG)
 app.logger.addHandler(stream_handler)
 
 sim = build_models.Similaritron()

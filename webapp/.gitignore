@@ -1,7 +1,0 @@
-*.json.gz
-card_commander_cardlist.txt
-*.index
-*.model
-*.projection
-*.mm
-*.dict

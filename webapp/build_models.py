@@ -5,14 +5,15 @@ import json
 import re
 from operator import itemgetter
 
-import nltk.stem, nltk.corpus
+import nltk.stem
+import nltk.corpus
 import wget
 from gensim import corpora, models, similarities
 
 
-#try:
+# try:
 #    stopwords = set(nltk.corpus.stopwords.words('english'))
-#except LookupError:
+# except LookupError:
 #    nltk.download('stopwords')
 stopwords = set(nltk.corpus.stopwords.words('english'))
 stemmer = nltk.stem.snowball.SnowballStemmer('english')
@@ -27,6 +28,7 @@ LSI = 'card_text_lsi.model'
 
 class Similaritron(object):
     # TODO: num_topics is a magic number?
+
     def __init__(self):
         print('Loading models...')
         self.dictionary = corpora.Dictionary.load(DICTIONARY)
@@ -36,13 +38,13 @@ class Similaritron(object):
         self.lsi = models.LsiModel.load(LSI)
 
         self.cards = json.load(gzip.open(LIBRARY, 'rt'))
-        self._card_index = {self._normalize_card_name(c['name']):idx
+        self._card_index = {self._normalize_card_name(c['name']): idx
                             for idx, c in enumerate(self.cards)}
         print('\t...done.')
 
     def _normalize_card_name(self, name):
         name = name.lower()
-        name = re.sub('[^a-z0-9]','', name)
+        name = re.sub('[^a-z0-9]', '', name)
         return name
 
     def _similarity(self, card):
@@ -50,7 +52,7 @@ class Similaritron(object):
         vec_lsi = self.lsi[self.tfidf[vec_bow]]
         scores = self.index[vec_lsi]
         return sorted(enumerate(scores),
-                key=itemgetter(1), reverse=True)
+                      key=itemgetter(1), reverse=True)
 
     @staticmethod
     def _match_filters(card, filters=None):
@@ -111,25 +113,25 @@ def make_bigrams(_iter):
 def tokenize(card):
     text = card.get('text', '')
 
-    ## Remove "Enchant X" on auras; it messes with TF/IDF
+    # Remove "Enchant X" on auras; it messes with TF/IDF
     text = re.sub(r'Enchant .+\n', ' ', text)
-    ## Remove the "Equip" cost of equipment
+    # Remove the "Equip" cost of equipment
     text = re.sub(r'Equip\W', ' ', text)
-    ## Remove case
+    # Remove case
     text = text.lower()
-    ## Replace card name with ~
+    # Replace card name with ~
     text = text.replace(card['name'].lower(), '~')
-    ## remove reminder text (in parentheses)
+    # remove reminder text (in parentheses)
     text = re.sub(r'\([^)]+\)', '', text)
-    ## remove costs
+    # remove costs
     text = re.sub(r'\{[^}]+\}', '', text)
-    ## genericize all p/t (de)buffs
+    # genericize all p/t (de)buffs
     text = re.sub(r'([+-])[\dX*]/([+-])[\dX*]', r'\1X/\2X', text)
-    ## genericize numbers
+    # genericize numbers
     text = re.sub(r'\d+', 'N', text)
-    ## replace opponent with player
+    # replace opponent with player
     text = text.replace('opponent', 'player')
-    ## split on punctuation and spaces
+    # split on punctuation and spaces
     tokens = re.split(r'[\s.,;:—()]+', text)
 
     # stem tokens
@@ -139,11 +141,11 @@ def tokenize(card):
     stopwords.update(['equipped'])
 
     tokens = [stemmer.stem(t) for t in tokens if t and t not in stopwords]
-    ## Perhaps bigrams shouldn't bridge stopwords?
-    ## e.g. "can't be blocked and has shroud" =/=> "blocked has"
+    # Perhaps bigrams shouldn't bridge stopwords?
+    # e.g. "can't be blocked and has shroud" =/=> "blocked has"
     bigrams = make_bigrams(tokens)
 
-    ## Add creature subtypes
+    # Add creature subtypes
     if 'Creature' in card.get('types', ''):
         subtypes = [t.lower() for t in card.get('subtypes', [])]
     else:

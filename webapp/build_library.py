@@ -3,8 +3,9 @@ import json
 
 import requests
 
+
 def _get(d, fields):
-    return {k:d[k] for k in fields if k in d}
+    return {k: d[k] for k in fields if k in d}
 
 if __name__ == '__main__':
     url = 'https://mtgjson.com/json/AllSetsArray.json.gz'

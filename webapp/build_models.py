@@ -154,7 +154,7 @@ def tokenize(card):
     return tokens + bigrams + subtypes
 
 
-if __name__ == '__main__':
+def main():
     cards = json.load(gzip.open(LIBRARY, 'rt'))
 
     card_names = [c['name'] for c in cards]
@@ -183,3 +183,6 @@ if __name__ == '__main__':
 
     index = similarities.MatrixSimilarity(corpus_lsi)
     index.save(INDEX)
+
+if __name__ == '__main__':
+    main()

@@ -7,7 +7,8 @@ import requests
 def _get(d, fields):
     return {k: d[k] for k in fields if k in d}
 
-if __name__ == '__main__':
+
+def main():
     url = 'https://mtgjson.com/json/AllSetsArray.json.gz'
     resp = requests.get(url)
     sets = json.loads(gzip.decompress(resp.content).decode('utf8'))
@@ -35,3 +36,6 @@ if __name__ == '__main__':
     fname = 'card_commander_cardlist.txt'
     with open(fname, 'wt') as f:
         f.write('\n'.join(sorted(cards.keys())))
+
+if __name__ == '__main__':
+    main()

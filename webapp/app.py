@@ -7,13 +7,14 @@ import os
 import build_models
 import build_all
 from flask import Flask, render_template, redirect, request, abort
-import threading
+import multiprocessing
 # an ungly and slow way of ensuring the production server has the models
 
 
-t = threading.Thread(target=build_all.main)
+t = multiprocessing.Process(target=build_all.main)
 t.start()
-t.join()
+
+
 app = Flask(__name__)
 
 sim = build_models.Similaritron()

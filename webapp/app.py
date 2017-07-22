@@ -5,17 +5,16 @@ import random
 import re
 import os
 import build_models
-import build_library
-import build_nltk
+import build_all
 from flask import Flask, render_template, redirect, request, abort
-import multiprocessing
+import threading
+# an ungly and slow way of ensuring the production server has the models
 
 
+t = threading.Thread(target=build_all.main)
+t.start()
+t.join()
 app = Flask(__name__)
-
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.DEBUG)
-app.logger.addHandler(stream_handler)
 
 sim = build_models.Similaritron()
 

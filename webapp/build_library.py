@@ -2,6 +2,11 @@ import gzip
 import json
 import requests
 
+OUTFILES = [
+    'card_commander_library.json.gz',
+    'card_commander_cardlist.txt'
+]
+
 
 def _get(d, fields):
     return {k: d[k] for k in fields if k in d}

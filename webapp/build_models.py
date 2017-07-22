@@ -25,6 +25,15 @@ INDEX = 'card_text_lsi.index'
 TFIDF = 'card_text_tfidf.model'
 LSI = 'card_text_lsi.model'
 
+OUTFILES = [
+    LIBRARY,
+    DICTIONARY,
+    CORPUS,
+    INDEX,
+    TFIDF,
+    LSI
+]
+
 
 class Similaritron(object):
     # TODO: num_topics is a magic number?

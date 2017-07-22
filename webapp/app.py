@@ -9,21 +9,13 @@ import build_library
 import build_nltk
 from flask import Flask, render_template, redirect, request, abort
 import multiprocessing
-# an ungly and slow way of ensuring the production server has the models
 
-
-def build_files():
-    logging.debug("Begin library building process.")
-    build_library.main()
-    build_models.main()
-    logging.debug("Finish library building process.")
-
-
-t = multiprocessing.Process(target=build_files)
-t.start()
 
 app = Flask(__name__)
 
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.INFO)
+app.logger.addHandler(stream_handler)
 
 sim = build_models.Similaritron()
 

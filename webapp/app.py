@@ -6,7 +6,14 @@ import re
 import os
 import build_models
 import build_library
+import build_nltk
 from flask import Flask, render_template, redirect, request, abort
+
+# an ungly and slow way of ensuring the production server has the models
+build_library.main()
+build_models.main()
+build_nltk.main()
+
 
 app = Flask(__name__)
 

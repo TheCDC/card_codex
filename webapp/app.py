@@ -13,8 +13,10 @@ import multiprocessing
 
 
 def build_files():
+    logging.debug("Begin library building process.")
     build_library.main()
     build_models.main()
+    logging.debug("Finish library building process.")
 
 
 t = multiprocessing.Process(target=build_files)

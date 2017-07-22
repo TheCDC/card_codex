@@ -1,19 +1,9 @@
 import json
-import gzip
-import logging
 import random
 import re
 import os
 import build_models
-import build_all
 from flask import Flask, render_template, redirect, request, abort
-import multiprocessing
-# an ungly and slow way of ensuring the production server has the models
-
-
-t = multiprocessing.Process(target=build_all.main)
-t.start()
-
 
 app = Flask(__name__)
 

@@ -2,3 +2,4 @@ flask
 gensim
 nltk
 wget
+gunicorn

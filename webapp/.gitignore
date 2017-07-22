@@ -1,5 +1,5 @@
 *.json.gz
-*.txt
+card_commander_cardlist.txt
 *.index
 *.model
 *.projection

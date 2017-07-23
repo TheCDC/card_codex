@@ -22,7 +22,7 @@ def main():
     CARD_FIELDS = ['name', 'names', 'manaCost', 'type', 'text',
                    'supertypes', 'types', 'subtypes', 'colorIdentity',
                    'power', 'toughness', 'loyalty']
-    SKIP_TYPES = {'Vanguard', 'Scheme', 'Conspiracy'}
+    SKIP_TYPES = {'Vanguard', 'Scheme', 'Conspiracy', 'Phenomenon'}
 
     for serie in sets:
         serie_info = _get(serie, SERIE_FIELDS)

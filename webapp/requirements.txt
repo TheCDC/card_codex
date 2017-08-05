@@ -12,6 +12,7 @@ Jinja2==2.9.6
 MarkupSafe==1.0
 nltk==3.2.4
 numpy==1.13.1
+pkg-resources==0.0.0
 requests==2.18.1
 scipy==0.19.1
 six==1.10.0

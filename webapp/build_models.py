@@ -110,13 +110,8 @@ class Similaritron(object):
         return similar_cards[offset:]
 
 
-def make_bigrams(_iter):
-    a, b = itertools.tee(_iter)
-    try:
-        next(b)
-    except StopIteration:
-        return []
-    return [' '.join(pair) for pair in zip(a, b)]
+def make_ngrams(tokens, n):
+    return [' '.join(tokens[i:i + n]) for i in range(len(tokens))]
 
 
 def tokenize(card):
@@ -152,7 +147,8 @@ def tokenize(card):
     tokens = [stemmer.stem(t) for t in tokens if t and t not in stopwords]
     # Perhaps bigrams shouldn't bridge stopwords?
     # e.g. "can't be blocked and has shroud" =/=> "blocked has"
-    bigrams = make_bigrams(tokens)
+    bigrams = make_ngrams(tokens, 2)
+    trigrams = make_ngrams(tokens, 3)
 
     # Add creature subtypes
     if 'Creature' in card.get('types', ''):
@@ -160,7 +156,7 @@ def tokenize(card):
     else:
         subtypes = []
 
-    return tokens + bigrams + subtypes
+    return tokens + bigrams +  subtypes
 
 
 def main():

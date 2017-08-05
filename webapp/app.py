@@ -4,10 +4,22 @@ import re
 import os
 import build_models
 from flask import Flask, render_template, redirect, request, abort
-
+import multiprocess
+import time
+from requests import get
 app = Flask(__name__)
 
 sim = build_models.Similaritron()
+
+
+def keep_alive_worker():
+    while True:
+        response = get("http://card-codex-clone.herokuapp.com/")
+        time.sleep(5)
+
+
+worker = multiprocess.Process(target=keep_alive_worker)
+worker.start()
 
 
 @app.url_defaults

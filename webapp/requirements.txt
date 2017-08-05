@@ -3,6 +3,7 @@ bz2file==0.98
 certifi==2017.4.17
 chardet==3.0.4
 click==6.7
+dill==0.2.7.1
 Flask==0.12.2
 gensim==2.2.0
 gunicorn==19.7.1
@@ -10,6 +11,7 @@ idna==2.5
 itsdangerous==0.24
 Jinja2==2.9.6
 MarkupSafe==1.0
+multiprocess==0.70.5
 nltk==3.2.4
 numpy==1.13.1
 requests==2.18.1

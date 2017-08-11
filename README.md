@@ -11,4 +11,4 @@ The web serves an interface for exploring the card similarity engine. [webapp/](
 
 # API
 
-The [webapp/](webapp/) also exposes a simple JSON api accessible at `/api` with the desired card name as the parameter. For example, to search for cards similar to the Commander/EDH staple Lightning Greaves, navigate to [https://card-codex-clone.herokuapp.com/api/?card=Lightning+Greaves](https://card-codex-clone.herokuapp.com/api/?card=Lightning+Greaves)
+The [webapp](webapp/) also exposes a simple JSON api accessible at `/api` with the desired card name as the parameter. For example, to search for cards similar to the Commander/EDH staple Lightning Greaves, navigate to [https://card-codex-clone.herokuapp.com/api/?card=Lightning+Greaves](https://card-codex-clone.herokuapp.com/api/?card=Lightning+Greaves)

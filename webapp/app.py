@@ -4,7 +4,7 @@ import re
 import os
 import build_models
 from flask import Flask, render_template, redirect, request, abort
-import multiprocess
+import multiprocessing
 import time
 from requests import get
 app = Flask(__name__)
@@ -18,7 +18,7 @@ def keep_alive_worker():
         time.sleep(5)
 
 
-worker = multiprocess.Process(target=keep_alive_worker)
+worker = multiprocessing.Process(target=keep_alive_worker)
 worker.start()
 
 

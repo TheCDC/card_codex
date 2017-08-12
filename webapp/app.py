@@ -81,6 +81,8 @@ def request_context(request):
     filters = {}
     if request.args.get('ci'):
         filters['ci'] = request.args.getlist('ci')
+    if request.args.get('legality'):
+        filters['legality'] = request.args.getlist('legality')
     if filters:
         context['filters'] = filters
 

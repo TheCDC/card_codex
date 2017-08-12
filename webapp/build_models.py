@@ -71,6 +71,13 @@ class Similaritron(object):
                 selected_ci = set(''.join(filters['ci']))
                 if not my_ci.issubset(selected_ci):
                     return False
+            if filters.get('legality'):
+                target_legality = filters.get('legality')[0]
+                if not card.get('legalities', False):
+                    return False
+                else:
+                    if target_legality not in [l.get('format') for l in card.get('legalities') if l.get('legality') == 'Legal']:
+                        return False
         return True
 
     def get_card_by_name(self, name):
@@ -156,7 +163,7 @@ def tokenize(card):
     else:
         subtypes = []
 
-    return tokens + bigrams +  subtypes
+    return tokens + bigrams + subtypes
 
 
 def main():

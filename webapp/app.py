@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 import random
 import re
@@ -14,7 +15,7 @@ sim = build_models.Similaritron()
 
 def keep_alive_worker():
     while True:
-        response = get("http://card-codex-clone.herokuapp.com/")
+        _ = get("http://card-codex-clone.herokuapp.com/")
         time.sleep(5)
 
 

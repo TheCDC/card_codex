@@ -13,7 +13,7 @@ def _get(d, fields):
 
 
 def main():
-    url = 'https://mtgjson.com/json/AllSetsArray.json.gz'
+    url = 'https://mtgjson.com/json/AllSets-x.json.gz'
     resp = requests.get(url)
     sets = json.loads(gzip.decompress(resp.content).decode('utf8'))
 
@@ -21,12 +21,11 @@ def main():
     SERIE_FIELDS = ['name', 'code']
     CARD_FIELDS = ['name', 'names', 'manaCost', 'type', 'text',
                    'supertypes', 'types', 'subtypes', 'colorIdentity',
-                   'power', 'toughness', 'loyalty']
-    SKIP_TYPES = {'Vanguard', 'Scheme', 'Conspiracy', 'Phenomenon'}
-
-    for serie in sets:
+                   'power', 'toughness', 'loyalty', 'legalities']
+    SKIP_TYPES = {'Vanguard', 'Scheme', 'Conspiracy', 'Phenomenon', 'Plane'}
+    for serie in sets.values():
         serie_info = _get(serie, SERIE_FIELDS)
-        for card in serie['cards']:
+        for card in serie.get('cards'):
             card_types = set(card.get('types', ''))
             if card_types.intersection(SKIP_TYPES):
                 continue

@@ -4,7 +4,7 @@ import itertools
 import json
 import re
 from operator import itemgetter
-
+import os
 import nltk.stem
 import nltk.corpus
 import wget
@@ -18,13 +18,20 @@ from gensim import corpora, models, similarities
 stopwords = set(nltk.corpus.stopwords.words('english'))
 stemmer = nltk.stem.snowball.SnowballStemmer('english')
 
-LIBRARY = 'card_commander_library.json.gz'
-DICTIONARY = 'card_text_dictionary.dict'
-CORPUS = 'card_text_corpus.mm'
-INDEX = 'card_text_lsi.index'
-TFIDF = 'card_text_tfidf.model'
-LSI = 'card_text_lsi.model'
 
+files = [
+    'card_commander_library.json.gz',
+    'card_text_dictionary.dict',
+    'card_text_corpus.mm',
+    'card_text_lsi.index',
+    'card_text_tfidf.model',
+    'card_text_lsi.model',
+]
+for index, f in enumerate(files):
+    files[index] = os.path.join(os.path.dirname(__file__), f)
+LIBRARY, DICTIONARY, CORPUS, INDEX, TFIDF, LSI = files
+
+# expose list of generated files so scripts can clean them up if needed
 OUTFILES = [
     LIBRARY,
     DICTIONARY,

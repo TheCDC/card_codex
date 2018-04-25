@@ -8,6 +8,8 @@ from flask import Flask, render_template, redirect, request, abort
 import multiprocessing
 import time
 from requests import get
+
+DO_KEEP_ALIVE = os.environ.get('KEEPALIVE', False)
 app = Flask(__name__)
 
 sim = build_models.Similaritron()
@@ -18,9 +20,9 @@ def keep_alive_worker():
         _ = get("http://card-codex-clone.herokuapp.com/")
         time.sleep(5)
 
-
-worker = multiprocessing.Process(target=keep_alive_worker)
-worker.start()
+if DO_KEEP_ALIVE:
+    worker = multiprocessing.Process(target=keep_alive_worker)
+    worker.start()
 
 
 @app.url_defaults

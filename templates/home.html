@@ -1,0 +1,199 @@
+{% extends "layout.html" %}
+{% block head %}
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='vendor/awesomplete/awesomplete.css') }}">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='home.css') }}">
+{% endblock %}
+
+{% macro card_text(card) %}
+{{card.text}}
+{% if card.power %}<span class="p-t">{{card.power}}/{{card.toughness}}</span>{% endif %}
+{% if card.loyalty %}<span class="loyalty">Loyalty {{card.loyalty}}</span>{% endif %}
+{% endmacro %}
+
+{% macro filter_checkbox(attr, val) -%}
+<label>{{val}}
+  <input type="checkbox" name="{{attr}}" value="{{val}}" {{'checked' if filters and val in filters[attr] else ''}}>
+</label>
+{% endmacro -%}
+
+{% block body %}
+<div class="title-box">
+  <h1 class="heading">Card Codex</h1>
+  <p class="subtitle">M:tG card similarity search</p>
+</div>
+<div id="search" class="search-bar">
+  <ul class="tab">
+    <li id="tab-card-search" class="tablinks" onclick="openTab(event, 'search-by-card')">Search by card</li>
+    <li id="tab-text-search" class="tablinks" onclick="openTab(event, 'search-by-text')">Search by text</li>
+  </ul>
+  <div id="search-by-card" class="tabcontent">
+    <form action="/#search" method="get">
+      <div>
+        <label><input id="card-search" name="card" type="text" placeholder="Enter a card name"></label>
+        <button type="submit">Search</button>
+        <a href="/random"><button type="button">Random card</button></a>
+      </div>
+    </form>
+  </div>
+  <div id="search-by-text" class="tabcontent">
+    <form action="/#search" method="get">
+      <div>
+        <label><input id="text-search" name="text" type="text" placeholder="Enter some card text"></label>
+        <button type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+  {% if error %}
+  <div class="error"><span>{{error}}</span></div>
+  {% endif %}
+</div>
+
+{% if target_card %}
+<div class="card-detail">
+{% if search_type == 'card' %}
+  <div class="card-title">
+    <h2 class="card-name">{{target_card.name}}</h2>
+    <ul class="card-links list-inline">
+      <li><a href="https://scryfall.com/search?q={{target_card.name | urlencode}}">Scryfall</a></li>
+    </ul>
+  </div>
+  <p>{{target_card.manaCost | mana}} &middot; {{target_card.type}}</p>
+  <p class="card-text">{{card_text(target_card)}}</p>
+  {% if target_card.names | length > 1 %}
+  <p>Other side:
+    {% for name in target_card.names if name != target_card.name %}
+    <a href="/?card={{name | urlencode}}#search">{{name}}</a>
+    {% endfor %}
+  </p>
+  {% endif %}
+{% else %}
+  <h2>Text search</h2>
+  <h3>{{target_card.name}}</h3>
+{% endif %}
+</div>
+{% endif %}
+
+{% if similar_cards %}
+<div class="search-results">
+  <h2 class="heading">Similar cards</h2>
+  <div class="pull-right">
+    <form name="filters" class="filters">
+      <input type="hidden" name="{{search_type}}" value="{{target_card.name}}">
+      <div>
+        Color identity:
+        {% for color in 'WUBRG' -%}
+        {{ filter_checkbox('ci', color) -}}
+        {% endfor %}
+        <button type="submit" style="margin-left: 8px; margin-right: 16px;">Filter</button>
+      </div>
+      {% if page > 1 %}<input type="hidden" name="page" value={{page}}>{% endif %}
+    </form>
+  </div>
+  <table>
+    <thead><tr>
+      <th>Name</th><th>Mana</th><th>Type</th><th>Text</th>
+    </tr></thead>
+    <tbody>
+    {% for card in similar_cards %}
+      <tr>
+        <td><a href="/?card={{card.name | urlencode}}#search">{{card.name}}</a></td>
+        <td>{{card.manaCost | mana}}</td><td>{{card.type}}</td>
+        <td>{{card_text(card)}}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="pager">
+{%- macro page_href(num=1) -%}
+/?{{search_type}}={{target_card.name | urlencode}}{{filters | params}}{{'&page=%i' % num if num > 1 else ''}}#search
+{%- endmacro -%}
+  {% if page > 1 %}
+    {% if page > 2 %}
+    <a href="{{page_href()}}"><button>&lt;&lt;</button></a>
+    {% endif %}
+    <a href="{{page_href(page-1)}}"><button>&lt;</button></a>
+  {% endif %}
+  Page {{page}}
+  <a href="{{page_href(page+1)}}"><button>&gt;</button></a>
+</div>
+{% endif %}
+{% endblock %}
+{% block js %}
+<script src="{{ url_for('static', filename='vendor/awesomplete/awesomplete.min.js') }}"></script>
+<script>
+function openTab(evt, contentId) {
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    //tabcontent[i].style.display = "none";
+    tabcontent[i].className = tabcontent[i].className.replace(" active", "");
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the button that opened the tab
+  //document.getElementById(contentId).style.display = "block";
+  document.getElementById(contentId).className += " active";
+  evt.currentTarget.className += " active";
+}
+
+(function(){
+  var searchType = '{{search_type}}' || 'card',
+      openTab = 'tab-' + searchType + '-search';
+  document.getElementById(openTab).click();
+
+  var cardInput = document.getElementById('card-search');
+  cardInput.addEventListener('awesomplete-selectcomplete', function(e){
+    e.target.form.submit();
+  });
+})();
+
+(function() {
+  var httpRequest;
+  makeRequest('GET', "{{ url_for('static', filename='card_commander_cardlist.txt') }}");
+
+  function successCallback(text){
+    var input = document.getElementById('card-search');
+    new Awesomplete(input, {
+      minChars: 3,
+      maxItems: 10,
+      list: text.split('\n')
+    });
+  }
+
+  function errorCallback(xhr){
+    console.error(xhr);
+  }
+
+  function makeRequest(method, url) {
+    httpRequest = new XMLHttpRequest();
+
+    if (!httpRequest) {
+      console.warn('Giving up :( Cannot create an XMLHTTP instance');
+      return false;
+    }
+    httpRequest.onreadystatechange = alertContents;
+    httpRequest.open(method, url);
+    httpRequest.send();
+  }
+
+  function alertContents() {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        successCallback(httpRequest.responseText);
+      } else {
+        errorCallback(httpRequest);
+      }
+    }
+  }
+})();
+</script>
+{% endblock %}

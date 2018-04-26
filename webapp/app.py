@@ -9,7 +9,7 @@ import multiprocessing
 import time
 from requests import get
 
-DO_KEEP_ALIVE = os.environ.get('KEEPALIVE', False)
+DO_KEEPALIVE = os.environ.get('KEEPALIVE', False)
 app = Flask(__name__)
 
 sim = build_models.Similaritron()
@@ -20,7 +20,7 @@ def keep_alive_worker():
         _ = get("http://card-codex-clone.herokuapp.com/")
         time.sleep(5)
 
-if DO_KEEP_ALIVE:
+if DO_KEEPALIVE:
     worker = multiprocessing.Process(target=keep_alive_worker)
     worker.start()
 

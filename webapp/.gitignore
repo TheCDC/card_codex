@@ -1,3 +1,7 @@
+# Pyinstaller
+dist/
+build/
+# gensim models
 card_commander_cardlist.txt
 card_commander_library.json.gz
 card_text_corpus.mm

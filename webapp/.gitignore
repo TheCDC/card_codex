@@ -1,0 +1,9 @@
+card_commander_cardlist.txt
+card_commander_library.json.gz
+card_text_corpus.mm
+card_text_corpus.mm.index
+card_text_dictionary.dict
+card_text_lsi.index
+card_text_lsi.model
+card_text_lsi.model.projection
+card_text_tfidf.model

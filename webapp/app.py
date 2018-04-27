@@ -8,6 +8,8 @@ from flask import Flask, render_template, redirect, request, abort
 import multiprocessing
 import time
 from requests import get
+from scipy import optimize
+
 
 DO_KEEPALIVE = os.environ.get('KEEPALIVE', False)
 app = Flask(__name__)

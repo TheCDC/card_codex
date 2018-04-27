@@ -5,7 +5,7 @@ echo "Publish to platform"
 RESPONSE=`curl -X POST \
 -H 'Content-Type: application/json' \
 -H 'Accept: application/vnd.heroku+json; version=3' \
--d "{\"checksum\":\"$CHECKSUM\", \"process_types\":{\"web\":\"env/bin/python3 app.py\"}}" \
+-d "{\"checksum\":\"$CHECKSUM\", \"process_types\":{\"web\":\"./app\"}}" \
 -n https://api.heroku.com/apps/card-codex-dev/slugs`
 echo $RESPONSE
 URL=`echo $RESPONSE | python -c "import json;import sys;print(json.load(sys.stdin)['blob']['url'])"`
@@ -15,10 +15,10 @@ echo "ID=$ID"
 
 
 echo "Upload slug"
-curl -X PUT \
+UPLOADRESPONSE=`curl -X PUT \
 -H "Content-Type:" \
 --data-binary @slug.tgz \
-$URL
+$URL`
 
 
 echo "Release slug"

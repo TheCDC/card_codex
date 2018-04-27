@@ -1,5 +1,5 @@
 mkdir app
-cp -R webapp/* app
+cp -R webapp/dist/app/* app
 rm slug.tgz
 tar czfv slug.tgz ./app
 # tar --strip-components 1 -xvf slug.tgz

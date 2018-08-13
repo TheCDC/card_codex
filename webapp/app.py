@@ -199,5 +199,14 @@ def random_card():
     card = random.choice(sim.cards)
     return redirect("/?card=%s" % card['name'])
 
+@app.after_request # blueprint can also be app~~
+def after_request(response):
+    """Enable cross-origin requests
+
+    https://stackoverflow.com/questions/25594893/how-to-enable-cors-in-flask-and-heroku#26395623"""
+    header = response.headers
+    header['Access-Control-Allow-Origin'] = '*'
+    return response
+
 if __name__ == '__main__':
     app.run(debug=True)

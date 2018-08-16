@@ -8,7 +8,7 @@ from flask import Flask, render_template, redirect, request, abort
 import multiprocessing
 import time
 from requests import get
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 
 
 DO_KEEP_ALIVE = os.environ.get('KEEPALIVE', False)
@@ -150,7 +150,7 @@ def home():
         page = 1
     context['page'] = page
     offset = N * (page - 1)
-    
+
     filters = {}
     if request.args.get('ci'):
         filters['ci'] = request.args.getlist('ci')

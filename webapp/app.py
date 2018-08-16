@@ -12,13 +12,15 @@ from requests import get
 DO_KEEP_ALIVE = os.environ.get('KEEPALIVE', False)
 app = Flask(__name__)
 
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 sim = build_models.Similaritron()
 
 
 def keep_alive_worker():
     while True:
         _ = get("http://card-codex-clone.herokuapp.com/")
-        time.sleep(5)
+        time.sleep(10)
 
 if DO_KEEP_ALIVE:
     worker = multiprocessing.Process(target=keep_alive_worker)

@@ -150,7 +150,7 @@ def home():
         page = 1
     context['page'] = page
     offset = N * (page - 1)
-
+    
     filters = {}
     if request.args.get('ci'):
         filters['ci'] = request.args.getlist('ci')

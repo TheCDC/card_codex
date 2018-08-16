@@ -8,11 +8,15 @@ from flask import Flask, render_template, redirect, request, abort
 import multiprocessing
 import time
 from requests import get
+from flask_cors import CORS, cross_origin
+
 
 DO_KEEP_ALIVE = os.environ.get('KEEPALIVE', False)
 app = Flask(__name__)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
+
+CORS(app) # hopefully allow cross origin requests
 
 sim = build_models.Similaritron()
 

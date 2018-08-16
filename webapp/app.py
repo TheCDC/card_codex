@@ -8,7 +8,7 @@ from flask import Flask, render_template, redirect, request, abort
 import multiprocessing
 import time
 from requests import get
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 
 DO_KEEP_ALIVE = os.environ.get('KEEPALIVE', False)
@@ -127,6 +127,8 @@ def request_context(request):
 
 
 @app.route('/')
+@cross_origin()
+
 def home():
 
     try:
@@ -191,6 +193,8 @@ def home():
 
 
 @app.route("/api/")
+@cross_origin()
+
 def api_search():
     try:
         return json.dumps(request_context(request))
@@ -199,12 +203,14 @@ def api_search():
 
 
 @app.route('/random')
+@cross_origin()
 def random_card():
     card = random.choice(sim.cards)
     return redirect("/?card=%s" % card['name'])
 
 
 @app.after_request # blueprint can also be app~~
+@cross_origin()
 def after_request(response):
     """Enable cross-origin requests
 

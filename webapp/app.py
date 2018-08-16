@@ -203,8 +203,7 @@ def after_request(response):
     """Enable cross-origin requests
 
     https://stackoverflow.com/questions/25594893/how-to-enable-cors-in-flask-and-heroku#26395623"""
-    header = response.headers
-    header['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 
 

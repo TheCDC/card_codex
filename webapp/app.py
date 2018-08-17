@@ -216,7 +216,8 @@ def after_request(response):
     https://stackoverflow.com/questions/25594893/how-to-enable-cors-in-flask-and-heroku#26395623"""
     response.headers['Access-Control-Allow-Header'] = '*'
     response.headers['Access-Control-Allow-Methods'] = '*'
-    response.headers['Access-Control-Allow-Origin'] = '*'
+    # https://stackoverflow.com/a/14484568
+    response.headers['Access-Control-Request-Headers'] = 'content-type'
     return response
 
 

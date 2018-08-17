@@ -14,7 +14,6 @@ from flask_cors import CORS, cross_origin
 DO_KEEP_ALIVE = os.environ.get('KEEPALIVE', False)
 app = Flask(__name__)
 
-app.config['CORS_HEADERS'] = 'Content-Type'
 
 CORS(app) # hopefully allow cross origin requests
 
@@ -215,8 +214,8 @@ def after_request(response):
     """Enable cross-origin requests
 
     https://stackoverflow.com/questions/25594893/how-to-enable-cors-in-flask-and-heroku#26395623"""
-    response.headers['Access-Control-Allow-Header'] = 'Content-Type'
-    response.headers['Access-Control-Allow-Methods'] = 'GET'
+    response.headers['Access-Control-Allow-Header'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = '*'
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 

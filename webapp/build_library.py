@@ -13,7 +13,7 @@ def _get(d, fields):
 
 
 def main():
-    url = 'https://mtgjson.com/json/AllSets-x.json.gz'
+    url = 'https://mtgjson.com/json/AllSets.json.gz'
     resp = requests.get(url)
     sets = json.loads(gzip.decompress(resp.content).decode('utf8'))
 
